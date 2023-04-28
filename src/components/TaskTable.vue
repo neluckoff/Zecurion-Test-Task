@@ -73,6 +73,7 @@
                 </tbody>
             </table>
         </div>
+        {{ connections }}
     </section>
 </template>
 
@@ -180,7 +181,7 @@ export default {
             this.delData.task = ""
             let newConnection = {};
             for (let key in this.connections) {
-                newConnection[`${parseInt(key[0])-1}${key.slice(1)}`] = this.connections[key]
+                newConnection[`${parseInt(key.match('(.*?)_'))-1 < 0 ? 0 : parseInt(key.match('(.*?)_'))-1}_${parseInt(key.match('(?<=_).*'))}`] = this.connections[key]
             }
             this.connections = newConnection
         },
@@ -194,7 +195,7 @@ export default {
             this.delData.date = ""
             let newConnection = {};
             for (let key in this.connections) {
-                newConnection[`${key.slice(0, -1)}${parseInt(key[2])-1}`] = this.connections[key]
+                newConnection[`${parseInt(key.match('(.*?)_'))}_${parseInt(key.match('(?<=_).*'))-1 < 0 ? 0 : parseInt(key.match('(?<=_).*'))-1}`] = this.connections[key]
             }
             this.connections = newConnection
         },
