@@ -14,7 +14,7 @@
             </div>
             <div class="form">
                 <label for="dates">Добавить новую дату</label>
-                <input type="text" id="dates" placeholder="01.01" v-model="data.date">
+                <input type="date" id="dates" placeholder="01.01.2023" format="dd.mm.yyyy" v-model="data.date">
                 <button @click="addDate" class="btn form__firstBtn">Добавить дату</button>
                 <label for="delDates" class="form__secondLabel">Удалить дату</label>
                 <select name="delDates" id="delDates" v-model="delData.date">
@@ -114,14 +114,23 @@ export default {
             }
         },
         async addDate() {
+            function stringToDate(stringDate) {
+                let [day, month, year] = stringDate.split(".");
+                return new Date(year, month - 1, day);
+            }
             if (this.data.date != "") {
                 if ([...this.dates.values()].includes(this.data.date)) {
                     alert('Такая дата уже существует!')
                 } else {
+                    this.data.date = new Date(this.data.date).toLocaleDateString("ru-RU", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric"
+                    })
                     let key = await this.generateRandomKey();
                     this.dates.set(key, this.data.date)
                     this.data.date = "";
-                    this.dates = new Map([...this.dates.entries()].sort((a, b) => a[1] - b[1]))
+                    this.dates = new Map(Array.from(this.dates.entries()).sort((a, b) => stringToDate(a[1]) - stringToDate(b[1])));
                 }
             } else {
                 alert('Поле с датой пусто!')
