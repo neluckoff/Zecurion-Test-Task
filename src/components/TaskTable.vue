@@ -8,7 +8,7 @@
                 <button @click="addTask" class="btn form__firstBtn">Добавить задачу</button>
                 <label for="delTasks" class="form__secondLabel">Удалить задачу</label>
                 <select name="delTasks" id="delTasks" v-model="delData.task">
-                    <option v-for="(task, i) in [...this.tasks.entries()]" :key="i" :value="task[0]">{{ task[1] }}</option>
+                    <option v-for="(task, i) in [...tasks.entries()]" :key="i" :value="task[0]">{{ task[1] }}</option>
                 </select>
                 <button @click="delTask" class="btn redBtn">Удалить задачу</button>
             </div>
@@ -18,7 +18,7 @@
                 <button @click="addDate" class="btn form__firstBtn">Добавить дату</button>
                 <label for="delDates" class="form__secondLabel">Удалить дату</label>
                 <select name="delDates" id="delDates" v-model="delData.date">
-                    <option v-for="(date, i) in [...this.dates.entries()]" :key="i" :name="i" :value="date[0]">{{ date[1] }}</option>
+                    <option v-for="(date, i) in [...dates.entries()]" :key="i" :name="i" :value="date[0]">{{ date[1] }}</option>
                 </select>
                 <button @click="delDate" class="btn redBtn">Удалить дату</button>
             </div>
@@ -28,7 +28,7 @@
                 <button @click="addStatus" class="btn form__firstBtn">Добавить статус</button>
                 <label for="delStatus" class="form__secondLabel">Удалить статус</label>
                 <select name="delStatus" id="delStatus" v-model="delData.status">
-                    <option v-for="(status, i) in [...this.statuses.entries()]" :key="i" :value="status[0]">{{ status[1] }}</option>
+                    <option v-for="(status, i) in [...statuses.entries()]" :key="i" :value="status[0]">{{ status[1] }}</option>
                 </select>
                 <button @click="delStatus" class="btn redBtn">Удалить статус</button>
             </div>
@@ -42,11 +42,11 @@
             </div>
         </div>
         <div class="div">
-            <table v-if="[...this.dates.entries()].length > 0 || [...this.tasks.entries()].length > 0">
+            <table v-if="[...this.dates.entries()].length > 0 || [...tasks.entries()].length > 0">
                 <thead>
                     <tr>
                         <th>Задачи / Даты</th>
-                        <th v-for="(date, i) in [...this.dates.values()]" :key="i">{{ date }}</th>
+                        <th v-for="(date, i) in [...dates.values()]" :key="i">{{ date }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,14 +55,14 @@
                             <input type="text" :value="task[1]" @input="updateQuery($event, task[0])">
                         </td>
                         <td v-for="(item, j) in dates" :key="j">
-                            <select :id="`${i}_${j}`" @click="setConnection($event, [...this.tasks.keys()][i], [...this.dates.keys()][j], `${i}_${j}`)" 
+                            <select :id="`${i}_${j}`" @click="setConnection($event, [...tasks.keys()][i], [...dates.keys()][j], `${i}_${j}`)" 
                             v-if="Object.keys(connections).includes(`${i}_${j}`)" v-model="connections[`${i}_${j}`].key">
                                 <option value="null"></option>
                                 <option v-for="(stat, k) in [...statuses.entries()]" :value="stat[0]" :key="k">
                                     {{ stat[1] }}
                                 </option>
                             </select>
-                            <select :id="`${i}_${j}`" @click="setConnection($event, [...this.tasks.keys()][i], [...this.dates.keys()][j], `${i}_${j}`)" v-else>
+                            <select :id="`${i}_${j}`" @click="setConnection($event, [...tasks.keys()][i], [...dates.keys()][j], `${i}_${j}`)" v-else>
                                 <option value="null"></option>
                                 <option v-for="(stat, k) in [...statuses.entries()]" :value="stat[0]" :key="k">
                                     {{ stat[1] }}
